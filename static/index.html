@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Game API Interface</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 20px;
+			}
+			.section {
+				margin-bottom: 20px;
+			}
+			.results {
+				margin-top: 10px;
+				padding: 10px;
+				border: 1px solid #ddd;
+				background-color: #f9f9f9;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Game API Interface</h1>
+
+		<div class="section">
+			<h2>Get Game by ID</h2>
+			<input type="number" id="gameIdInput" placeholder="Enter Game ID" />
+			<button onclick="getGameById()">Get Game</button>
+			<div id="gameResult" class="results"></div>
+		</div>
+
+		<div class="section">
+			<h2>Get Games Ranked by Sunk Ships</h2>
+			<input
+				type="number"
+				id="sunkLimitInput"
+				placeholder="Enter Limit (max 50)"
+				value="50"
+			/>
+			<input
+				type="number"
+				id="sunkStartInput"
+				placeholder="Enter Start Index"
+				value="1"
+			/>
+			<button onclick="getGamesRankedBySunk()">Get Games</button>
+			<div id="sunkResult" class="results"></div>
+		</div>
+
+		<div class="section">
+			<h2>Get Games Ranked by Escaped Ships</h2>
+			<input
+				type="number"
+				id="escapedLimitInput"
+				placeholder="Enter Limit (max 50)"
+				value="50"
+			/>
+			<input
+				type="number"
+				id="escapedStartInput"
+				placeholder="Enter Start Index"
+				value="1"
+			/>
+			<button onclick="getGamesRankedByEscaped()">Get Games</button>
+			<div id="escapedResult" class="results"></div>
+		</div>
+
+		<script>
+			async function getGameById() {
+				const gameId = document.getElementById("gameIdInput").value;
+				const response = await fetch(`/api/game/${gameId}`);
+				const result = await response.json();
+				document.getElementById("gameResult").innerText =
+					JSON.stringify(result, null, 2);
+			}
+
+			async function getGamesRankedBySunk() {
+				const limit = document.getElementById("sunkLimitInput").value;
+				const start = document.getElementById("sunkStartInput").value;
+				const response = await fetch(
+					`/api/rank/sunk?limit=${limit}&start=${start}`
+				);
+				const result = await response.json();
+				document.getElementById("sunkResult").innerText =
+					JSON.stringify(result, null, 2);
+			}
+
+			async function getGamesRankedByEscaped() {
+				const limit =
+					document.getElementById("escapedLimitInput").value;
+				const start =
+					document.getElementById("escapedStartInput").value;
+				const response = await fetch(
+					`/api/rank/escaped?limit=${limit}&start=${start}`
+				);
+				const result = await response.json();
+				document.getElementById("escapedResult").innerText =
+					JSON.stringify(result, null, 2);
+			}
+		</script>
+	</body>
+</html>
