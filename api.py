@@ -20,7 +20,7 @@ def get_games_ranked_sunk():
     index = request.args.get("start", default=0, type=int)-1
     if count > 50:
         return jsonify({"error": "Count should be maximum 50"}), 400
-    if index >= len(game_data) or index<0:
+    if index >= len(game_data) or index < 0:
         return jsonify({"error": "Index out of bounds"}), 400
 
     games_sunk_ranks = sorted(
@@ -32,7 +32,7 @@ def get_games_ranked_sunk():
             "ranking": "sunk",
             "limit": count,
             "start": index+1,
-            "games": games_sunk_ranks[index : index + count],
+            "games": games_sunk_ranks[index: index + count],
             "prev": prev,
             "next": next,
         }
@@ -48,7 +48,8 @@ def get_games_ranked_escaped():
     if index >= len(game_data) or index < 0:
         return jsonify({"error": "Index out of bounds"}), 400
 
-    games_escaped_ranks = sorted(game_data, key=lambda x: x.get("escaped_ships", 0))
+    games_escaped_ranks = sorted(
+        game_data, key=lambda x: x.get("escaped_ships", 0))
     prev, next = get_neighbor_urls(
         "/api/rank/escaped", index, count
     )
@@ -57,21 +58,22 @@ def get_games_ranked_escaped():
             "ranking": "escaped",
             "limit": count,
             "start": index+1,
-            "games": games_escaped_ranks[index : index + count],
+            "games": games_escaped_ranks[index: index + count],
             "prev": prev,
             "next": next
         }
     )
 
-def get_neighbor_urls(base,index,count):
-    if index<count:
-        prev=None
+
+def get_neighbor_urls(base, index, count):
+    if index < count:
+        prev = None
     else:
         prev = base+"?limit="+str(count)+"&start="+str(index-count+1)
 
-    if index+count>=len(game_data):
+    if index+count >= len(game_data):
         next = None
     else:
         next = base + "?limit=" + str(count) + "&start=" + str(index + count+1)
-        
-    return prev,next
+
+    return prev, next

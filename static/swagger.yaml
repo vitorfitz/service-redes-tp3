@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+    title: Game API
+    version: 1.0.0
+servers:
+    - url: http://localhost:5000
+paths:
+    /api/game/{id}:
+        get:
+            summary: Get game by ID
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: Game found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    game_id:
+                                        type: integer
+                                    game_stats:
+                                        type: object
+                "404":
+                    description: Game not found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+    /api/rank/sunk:
+        get:
+            summary: Get games ranked by sunk ships
+            parameters:
+                - name: limit
+                  in: query
+                  required: false
+                  schema:
+                      type: integer
+                  description: Maximum number of games to return (default is 50)
+                - name: start
+                  in: query
+                  required: false
+                  schema:
+                      type: integer
+                  description: Start index for pagination (default is 0)
+            responses:
+                "200":
+                    description: List of games ranked by sunk ships
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    ranking:
+                                        type: string
+                                    limit:
+                                        type: integer
+                                    start:
+                                        type: integer
+                                    games:
+                                        type: array
+                                        items:
+                                            type: object
+    /api/rank/escaped:
+        get:
+            summary: Get games ranked by escaped ships
+            parameters:
+                - name: limit
+                  in: query
+                  required: false
+                  schema:
+                      type: integer
+                  description: Maximum number of games to return (default is 50)
+                - name: start
+                  in: query
+                  required: false
+                  schema:
+                      type: integer
+                  description: Start index for pagination (default is 0)
+            responses:
+                "200":
+                    description: List of games ranked by escaped ships
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    ranking:
+                                        type: string
+                                    limit:
+                                        type: integer
+                                    start:
+                                        type: integer
+                                    games:
+                                        type: array
+                                        items:
+                                            type: object
